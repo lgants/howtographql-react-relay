@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash baae055802675998e3c0bad89089f988
+ * @relayHash 9da67b0ef00cb1d4281e5d786f2c4853
  */
 
 /* eslint-disable */
@@ -9,28 +9,34 @@
 
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
-export type CreateLinkMutationVariables = {|
+export type CreateVoteMutationVariables = {|
   input: {
-    description: string;
-    url: string;
-    postedById?: ?string;
-    votesIds?: ?$ReadOnlyArray<string>;
-    votes?: ?$ReadOnlyArray<{
-      userId?: ?string;
-    }>;
+    linkId?: ?string;
+    link?: ?{
+      description: string;
+      url: string;
+      postedById?: ?string;
+      votesIds?: ?$ReadOnlyArray<string>;
+      votes?: ?$ReadOnlyArray<{
+        userId?: ?string;
+      }>;
+    };
+    userId?: ?string;
     clientMutationId: string;
   };
 |};
-export type CreateLinkMutationResponse = {|
-  +createLink: ?{|
-    +link: ?{|
+export type CreateVoteMutationResponse = {|
+  +createVote: ?{|
+    +vote: ?{|
       +id: string;
-      +createdAt: any;
-      +url: string;
-      +description: string;
-      +postedBy: ?{|
+      +link: {|
         +id: string;
-        +name: string;
+        +votes: ?{|
+          +count: number;
+        |};
+      |};
+      +user: {|
+        +id: string;
       |};
     |};
   |};
@@ -39,18 +45,20 @@ export type CreateLinkMutationResponse = {|
 
 
 /*
-mutation CreateLinkMutation(
-  $input: CreateLinkInput!
+mutation CreateVoteMutation(
+  $input: CreateVoteInput!
 ) {
-  createLink(input: $input) {
-    link {
+  createVote(input: $input) {
+    vote {
       id
-      createdAt
-      url
-      description
-      postedBy {
+      link {
         id
-        name
+        votes {
+          count
+        }
+      }
+      user {
+        id
       }
     }
   }
@@ -63,13 +71,13 @@ const batch /*: ConcreteBatch*/ = {
       {
         "kind": "LocalArgument",
         "name": "input",
-        "type": "CreateLinkInput!",
+        "type": "CreateVoteInput!",
         "defaultValue": null
       }
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "CreateLinkMutation",
+    "name": "CreateVoteMutation",
     "selections": [
       {
         "kind": "LinkedField",
@@ -79,19 +87,19 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "Variable",
             "name": "input",
             "variableName": "input",
-            "type": "CreateLinkInput!"
+            "type": "CreateVoteInput!"
           }
         ],
-        "concreteType": "CreateLinkPayload",
-        "name": "createLink",
+        "concreteType": "CreateVotePayload",
+        "name": "createVote",
         "plural": false,
         "selections": [
           {
             "kind": "LinkedField",
             "alias": null,
             "args": null,
-            "concreteType": "Link",
-            "name": "link",
+            "concreteType": "Vote",
+            "name": "vote",
             "plural": false,
             "selections": [
               {
@@ -102,32 +110,11 @@ const batch /*: ConcreteBatch*/ = {
                 "storageKey": null
               },
               {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "createdAt",
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "url",
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "description",
-                "storageKey": null
-              },
-              {
                 "kind": "LinkedField",
                 "alias": null,
                 "args": null,
-                "concreteType": "User",
-                "name": "postedBy",
+                "concreteType": "Link",
+                "name": "link",
                 "plural": false,
                 "selections": [
                   {
@@ -138,10 +125,39 @@ const batch /*: ConcreteBatch*/ = {
                     "storageKey": null
                   },
                   {
+                    "kind": "LinkedField",
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "VoteConnection",
+                    "name": "votes",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "args": null,
+                        "name": "count",
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              },
+              {
+                "kind": "LinkedField",
+                "alias": null,
+                "args": null,
+                "concreteType": "User",
+                "name": "user",
+                "plural": false,
+                "selections": [
+                  {
                     "kind": "ScalarField",
                     "alias": null,
                     "args": null,
-                    "name": "name",
+                    "name": "id",
                     "storageKey": null
                   }
                 ],
@@ -159,18 +175,18 @@ const batch /*: ConcreteBatch*/ = {
   "id": null,
   "kind": "Batch",
   "metadata": {},
-  "name": "CreateLinkMutation",
+  "name": "CreateVoteMutation",
   "query": {
     "argumentDefinitions": [
       {
         "kind": "LocalArgument",
         "name": "input",
-        "type": "CreateLinkInput!",
+        "type": "CreateVoteInput!",
         "defaultValue": null
       }
     ],
     "kind": "Root",
-    "name": "CreateLinkMutation",
+    "name": "CreateVoteMutation",
     "operation": "mutation",
     "selections": [
       {
@@ -181,19 +197,19 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "Variable",
             "name": "input",
             "variableName": "input",
-            "type": "CreateLinkInput!"
+            "type": "CreateVoteInput!"
           }
         ],
-        "concreteType": "CreateLinkPayload",
-        "name": "createLink",
+        "concreteType": "CreateVotePayload",
+        "name": "createVote",
         "plural": false,
         "selections": [
           {
             "kind": "LinkedField",
             "alias": null,
             "args": null,
-            "concreteType": "Link",
-            "name": "link",
+            "concreteType": "Vote",
+            "name": "vote",
             "plural": false,
             "selections": [
               {
@@ -204,32 +220,11 @@ const batch /*: ConcreteBatch*/ = {
                 "storageKey": null
               },
               {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "createdAt",
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "url",
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "description",
-                "storageKey": null
-              },
-              {
                 "kind": "LinkedField",
                 "alias": null,
                 "args": null,
-                "concreteType": "User",
-                "name": "postedBy",
+                "concreteType": "Link",
+                "name": "link",
                 "plural": false,
                 "selections": [
                   {
@@ -240,10 +235,39 @@ const batch /*: ConcreteBatch*/ = {
                     "storageKey": null
                   },
                   {
+                    "kind": "LinkedField",
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "VoteConnection",
+                    "name": "votes",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "args": null,
+                        "name": "count",
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              },
+              {
+                "kind": "LinkedField",
+                "alias": null,
+                "args": null,
+                "concreteType": "User",
+                "name": "user",
+                "plural": false,
+                "selections": [
+                  {
                     "kind": "ScalarField",
                     "alias": null,
                     "args": null,
-                    "name": "name",
+                    "name": "id",
                     "storageKey": null
                   }
                 ],
@@ -257,7 +281,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation CreateLinkMutation(\n  $input: CreateLinkInput!\n) {\n  createLink(input: $input) {\n    link {\n      id\n      createdAt\n      url\n      description\n      postedBy {\n        id\n        name\n      }\n    }\n  }\n}\n"
+  "text": "mutation CreateVoteMutation(\n  $input: CreateVoteInput!\n) {\n  createVote(input: $input) {\n    vote {\n      id\n      link {\n        id\n        votes {\n          count\n        }\n      }\n      user {\n        id\n      }\n    }\n  }\n}\n"
 };
 
 module.exports = batch;
